@@ -63,7 +63,7 @@ def draw_annotate(fig, ax, x, y, textx, texty, text, color=[0, 0, 0, 1], arrowco
         verticalalignment='center'
     )
 
-def get_labels(data, fill=["number"]):
+def get_labels(data, fill=["number"], split_with_new_line=False):
     """
     get a dict of labels for groups in data
 
@@ -108,9 +108,17 @@ def get_labels(data, fill=["number"]):
         set_collections[key] = value
 
     labels = {k: "" for k in set_collections}
+    if "data" in fill:
+      for k in set_collections:
+        value_in_k = list(set_collections[k])
+        for i in range(len(value_in_k)):
+          if i != len(value_in_k) - 1 and split_with_new_line == False:
+            labels[k] += f'{value_in_k[i]}, '
+          else:
+            labels[k] += f'{value_in_k[i]}\n'
     if "logic" in fill:
         for k in set_collections:
-            labels[k] = k + ": "
+            labels[k] += k + ": "
     if "number" in fill:
         for k in set_collections:
             labels[k] += str(len(set_collections[k]))
